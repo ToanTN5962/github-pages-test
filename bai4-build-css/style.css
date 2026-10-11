@@ -54,7 +54,7 @@ h1,
 h2,
 h3,
 .site-name {
-	font-family: Georgia, "Times New Roman", serif;
+	font-family: "Segoe UI", Arial, sans-serif;
 	line-height: 1.2;
 }
 
@@ -144,7 +144,7 @@ main > article {
 h1 {
 	margin-bottom: 1.5rem;
 	font-size: clamp(2.2rem, 4vw, 3.6rem);
-	letter-spacing: -0.035em;
+	letter-spacing: normal;
 }
 
 main > article figure {
