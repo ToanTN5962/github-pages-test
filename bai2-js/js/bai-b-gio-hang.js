@@ -19,43 +19,70 @@ class GioHang {
 
 	// 1. Thêm sản phẩm; trả về true nếu thêm được, false nếu soLuong không hợp lệ.
 	them(sanPham, soLuong) {
-		// TODO
+		if (!Number.isInteger(soLuong) || soLuong <= 0) return false;
+
+		const dong = this.dsDong.find(dong => dong.id === sanPham.id);
+		if (dong) {
+			dong.soLuong += soLuong;
+		} else {
+			const { id, ten, loai, gia } = sanPham;
+			this.dsDong.push({ id, ten, loai, gia, soLuong });
+		}
+		return true;
 	}
 
 	// 2. Xoá dòng có id tương ứng; trả về true nếu có xoá, false nếu không tìm thấy.
 	xoa(id) {
-		// TODO
+		const viTri = this.dsDong.findIndex(dong => dong.id === id);
+		if (viTri === -1) return false;
+		this.dsDong.splice(viTri, 1);
+		return true;
 	}
 
 	// 3. Tổng tiền cả giỏ.
 	tongTien() {
-		// TODO
+		return this.dsDong.reduce((tong, dong) => tong + dong.gia * dong.soLuong, 0);
 	}
 
 	// 4. Object thống kê: { "<loai>": tổng tiền của loại đó, ... }.
 	thongKeTheoLoai() {
-		// TODO
+		const thongKe = {};
+		for (const dong of this.dsDong) {
+			thongKe[dong.loai] = (thongKe[dong.loai] || 0) + dong.gia * dong.soLuong;
+		}
+		return thongKe;
 	}
 
 	// 5. Dòng có thành tiền lớn nhất (bản sao, có thêm thanhTien); null nếu giỏ rỗng.
 	dongDatNhat() {
-		// TODO
+		if (this.dsDong.length === 0) return null;
+		const dong = this.dsDong.reduce((datNhat, hienTai) =>
+			hienTai.gia * hienTai.soLuong > datNhat.gia * datNhat.soLuong ? hienTai : datNhat
+		);
+		return { ...dong, thanhTien: dong.gia * dong.soLuong };
 	}
 
 	// 6. Mảng BẢN SAO các dòng, mỗi dòng có thêm thuộc tính thanhTien.
 	layDanhSach() {
-		// TODO
+		return this.dsDong.map(dong => ({
+			...dong,
+			thanhTien: dong.gia * dong.soLuong
+		}));
 	}
 
 	// 7. Chuỗi JSON của mảng các dòng.
 	xuatJSON() {
-		// TODO
+		return JSON.stringify(this.dsDong);
 	}
 }
 
 // 8. Tạo lại một GioHang từ chuỗi JSON do xuatJSON() sinh ra.
 function napGioHang(chuoiJSON) {
-	// TODO
+	const gio = new GioHang();
+	for (const dong of JSON.parse(chuoiJSON)) {
+		gio.them(dong, dong.soLuong);
+	}
+	return gio;
 }
 
 // ---------- CHẠY THỬ (không sửa) ----------
